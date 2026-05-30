@@ -28,3 +28,5 @@ sprite_frames = SubResource("SpriteFrames_6t5aa")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2058491844]
 
 [node name="dashTimer" type="Timer" parent="." unique_id=2040499487]
+
+[node name="dashCooldownTimer" type="Timer" parent="." unique_id=1377460482]
