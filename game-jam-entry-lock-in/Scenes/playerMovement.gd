@@ -4,8 +4,7 @@ class_name PossessableCharacter
 @export var is_possessed: bool = false
 @export var speed: float = 300.0
 @onready var eject_marker: Marker2D = $ejectMarker
-
-
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 var gravity: float = 500.0
@@ -19,13 +18,13 @@ var can_dash: bool = true
 @onready var dash_cooldown: Timer = $dashCooldown
 
 
-
 # Jump variables
 @export var jump_speed: float = -550.0          
 @export var base_gravity: float = 1400.0        
 @export var fall_gravity_multiplier: float = 1.7 
 @export var jump_cut_multiplier: float = 0.35   
 var is_jumping: bool = false
+
 
 func _physics_process(delta: float) -> void:
 	var input_dir: float = 0.0
@@ -43,12 +42,15 @@ func _physics_process(delta: float) -> void:
 
 	
 	if not is_on_floor() or velocity.y < 0:
+		animated_sprite_2d.play("jump")
 		var current_gravity = base_gravity
 		if velocity.y > 0:
 			current_gravity *= fall_gravity_multiplier
 		velocity.y += current_gravity * delta
+		
 	else:
 		is_jumping = false
+		animated_sprite_2d.play("move")
 
 	# Jump
 	if want_jump and is_on_floor():
@@ -66,6 +68,7 @@ func _physics_process(delta: float) -> void:
 		can_dash = false
 		dash_timer.start()
 		dash_cooldown.start()
+		animated_sprite_2d.play("dash")
 
 	# Movement
 	if input_dir != 0:
@@ -73,7 +76,13 @@ func _physics_process(delta: float) -> void:
 		animated_sprite_2d.flip_h = (input_dir < 0)
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
-
+	
+	if not is_dashing:
+		if input_dir != 0:
+			animated_sprite_2d.play("move")
+	else:
+			animated_sprite_2d.play("dash")
+	
 	move_and_slide()
 
 # Dash functions

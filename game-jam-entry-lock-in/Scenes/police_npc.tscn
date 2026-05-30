@@ -5,6 +5,10 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hkck"]
+atlas = ExtResource("2_0hkck")
+region = Rect2(33, 14, 29, 21)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_6x6wt"]
 atlas = ExtResource("2_0hkck")
 region = Rect2(64, 0, 32, 35)
@@ -13,10 +17,18 @@ region = Rect2(64, 0, 32, 35)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_0hkck")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_6x6wt")
 }],
 "loop": true,
-"name": &"default",
+"name": &"move",
 "speed": 5.0
 }]
 
@@ -28,6 +40,7 @@ shape = SubResource("RectangleShape2D_0hkck")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=31265239]
 sprite_frames = SubResource("SpriteFrames_6x6wt")
+animation = &"jump"
 
 [node name="dashTimer" type="Timer" parent="." unique_id=1959019011]
 wait_time = 0.2
@@ -37,3 +50,6 @@ wait_time = 0.2
 [node name="ejectMarker" type="Marker2D" parent="." unique_id=845956257]
 position = Vector2(12, 2)
 rotation = 1.5707964
+
+[connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]
