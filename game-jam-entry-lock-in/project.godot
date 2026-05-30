@@ -15,6 +15,10 @@ run/main_scene="uid://u37wxdo2r631"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[global_group]
+
+possessable="Possessable npcs for the player."
+
 [input]
 
 right={
@@ -51,4 +55,5 @@ possess={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"

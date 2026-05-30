@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dg1vrp1pr5ig5"]
+
+[ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_vl2al"]
+[ext_resource type="Texture2D" uid="uid://bcuhts2cqbx0c" path="res://assets/player/spritePlayerSheet.png" id="2_0hkck"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6x6wt"]
+atlas = ExtResource("2_0hkck")
+region = Rect2(64, 0, 32, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6x6wt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6x6wt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="policeNpc" type="CharacterBody2D" unique_id=94176087 groups=["possessable"]]
+script = ExtResource("1_vl2al")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=767524209]
+shape = SubResource("RectangleShape2D_0hkck")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=31265239]
+sprite_frames = SubResource("SpriteFrames_6x6wt")
+
+[node name="dashTimer" type="Timer" parent="." unique_id=1959019011]
+wait_time = 0.2
+
+[node name="dashCooldown" type="Timer" parent="." unique_id=1917920245]
+
+[node name="ejectMarker" type="Marker2D" parent="." unique_id=845956257]
+position = Vector2(12, 2)
+rotation = 1.5707964

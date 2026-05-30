@@ -1,36 +1,66 @@
 [gd_scene format=3 uid="uid://c8nno8k74iwsu"]
 
-[ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/possessed.gd" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://bcuhts2cqbx0c" path="res://assets/player/spritePlayerSheet.png" id="2_cvnsp"]
+[ext_resource type="Script" uid="uid://ytynqewpv8c7" path="res://Scenes/playerControl.gd" id="3_vgqql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
+size = Vector2(29, 22)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cvnsp"]
-load_path = "res://.godot/imported/texture_16px 1.png-0b6432c0daa05dc2d1a70221f62a9222.ctex"
+[sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(32, 0, 32, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(64, 0, 32, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkybt"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(0, 0, 32, 35)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6t5aa"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("CompressedTexture2D_cvnsp")
+"texture": SubResource("AtlasTexture_6t5aa")
 }],
 "loop": true,
-"name": &"default",
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgqql")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkybt")
+}],
+"loop": true,
+"name": &"move",
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]
-radius = 27.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fkybt"]
+radius = 19.0
+height = 52.0
 
 [node name="player" type="CharacterBody2D" unique_id=1722511285]
-script = ExtResource("1_v0iea")
+script = ExtResource("1_6t5aa")
 is_possessed = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=680300575]
 shape = SubResource("RectangleShape2D_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=452701996]
-scale = Vector2(2.328125, 1)
+position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_6t5aa")
+animation = &"dash"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2058491844]
 
@@ -40,8 +70,12 @@ wait_time = 0.2
 [node name="dashCooldown" type="Timer" parent="." unique_id=1377460482]
 
 [node name="possessionMechanic" type="Node2D" parent="." unique_id=1318690884]
+script = ExtResource("3_vgqql")
 
 [node name="possessionArea" type="Area2D" parent="possessionMechanic" unique_id=607529587]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="possessionMechanic/possessionArea" unique_id=1238487290]
-shape = SubResource("CircleShape2D_6t5aa")
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_fkybt")
+
+[node name="ejectMarker" type="Marker2D" parent="." unique_id=247456070]
