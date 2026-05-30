@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://u37wxdo2r631"]
 
+[ext_resource type="PackedScene" uid="uid://c8nno8k74iwsu" path="res://Scenes/player.tscn" id="1_jjgbg"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7u77a"]
 
 [node name="main" type="Node2D" unique_id=296852109]
@@ -10,3 +12,5 @@
 shape = SubResource("RectangleShape2D_7u77a")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1785028548]
+
+[node name="player" parent="." unique_id=1722511285 instance=ExtResource("1_jjgbg")]
