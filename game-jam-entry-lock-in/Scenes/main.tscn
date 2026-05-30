@@ -8,3 +8,5 @@
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1433435809]
 shape = SubResource("RectangleShape2D_7u77a")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=888222903]
