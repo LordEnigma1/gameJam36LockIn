@@ -1,57 +1,63 @@
 extends CharacterBody2D
 
 @export var speed: float = 300.0
-@export var jump_velocity: float = -400.0
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
+var gravity: float = 500.0
 
-const DASH_SPEED: float = 600.0
-const DASH_DURATION: float = 0.15
-const DASH_COOLDOWN: float = 0.5
-
+# Dash variables
+const DASH_SPEED: float = 1000.0
 var is_dashing: bool = false
-var last_direction: float = 1.0 
-
+var can_dash: bool = true
 @onready var dash_timer: Timer = $dashTimer
-@onready var dash_cooldown_timer: Timer = $dashCooldownTimer
+@onready var dash_cooldown: Timer = $dashCooldown
 
-func _ready() -> void:
-	dash_timer.timeout.connect(_on_dash_timer_timeout)
-	dash_cooldown_timer.timeout.connect(_on_dash_cooldown_timeout)
+# Jump variables
+@export var jump_speed: float = -550.0          
+@export var base_gravity: float = 1400.0        
+@export var fall_gravity_multiplier: float = 1.7 
+@export var jump_cut_multiplier: float = 0.35   
+var is_jumping: bool = false
 
 func _physics_process(delta: float) -> void:
-	if is_dashing:
-		velocity.x = last_direction * DASH_SPEED
-		velocity.y = clamp(velocity.y, -200.0, 200.0)
-		move_and_slide()
-		return
-
-
-	if not is_on_floor():
-		velocity.y += gravity * delta
+	if not is_on_floor() or velocity.y < 0:
+		var current_gravity = base_gravity
+		
+		if velocity.y > 0:
+			current_gravity *= fall_gravity_multiplier
+			
+		velocity.y += current_gravity * delta
+	else:
+		is_jumping = false
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = jump_velocity
+		velocity.y = jump_speed
+		is_jumping = true
 
+	if Input.is_action_just_released("jump") and is_jumping and velocity.y < 0:
+		velocity.y *= jump_cut_multiplier
+		is_jumping = false
+
+	# Dash
+	if Input.is_action_just_pressed("dash") and can_dash:
+		is_dashing = true
+		can_dash = false
+		dash_timer.start()
+		dash_cooldown.start()
+
+	# Movement
 	var direction := Input.get_axis("left", "right")
 	if direction:
-		velocity.x = direction * speed
-		last_direction = sign(direction)
+		velocity.x = direction * (DASH_SPEED if is_dashing else speed)
+		animated_sprite_2d.flip_h = (direction < 0)
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 
-	if Input.is_action_just_pressed("dash") and not is_dashing and dash_cooldown_timer.is_stopped():
-		dash()
-
 	move_and_slide()
 
-func dash() -> void:
-	is_dashing = true
-	dash_timer.start(DASH_DURATION)
-
+# Dash functions
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
-	dash_cooldown_timer.start(DASH_COOLDOWN)
 
 func _on_dash_cooldown_timeout() -> void:
-	pass 
+	can_dash = true

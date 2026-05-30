@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8nno8k74iwsu"]
 
 [ext_resource type="Script" uid="uid://yfyw5rrjs0j2" path="res://Scenes/player.gd" id="1_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://bk5i4yta7dkg2" path="res://icon.svg" id="1_v0iea"]
+[ext_resource type="Texture2D" uid="uid://dwxcd0oa4a7un" path="res://Assets/separate/texture_16px 1.png" id="2_cvnsp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
 
@@ -9,7 +9,7 @@
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_v0iea")
+"texture": ExtResource("2_cvnsp")
 }],
 "loop": true,
 "name": &"default",
@@ -23,10 +23,15 @@ script = ExtResource("1_cvnsp")
 shape = SubResource("RectangleShape2D_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=452701996]
+scale = Vector2(2.328125, 1)
 sprite_frames = SubResource("SpriteFrames_6t5aa")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2058491844]
 
 [node name="dashTimer" type="Timer" parent="." unique_id=2040499487]
+wait_time = 0.2
 
-[node name="dashCooldownTimer" type="Timer" parent="." unique_id=1377460482]
+[node name="dashCooldown" type="Timer" parent="." unique_id=1377460482]
+
+[connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]
