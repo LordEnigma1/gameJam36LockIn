@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://c8nno8k74iwsu" path="res://Scenes/player.tscn" id="1_jjgbg"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jjgbg"]
-load_path = "res://.godot/imported/texture_16px 7.png-0f3b5a39617e2ab3d348dba62e2dca32.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jjgbg"]
 size = Vector2(1158, 20)
@@ -23,3 +22,5 @@ texture = SubResource("CompressedTexture2D_jjgbg")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=863878811]
 position = Vector2(-6, 151)
 shape = SubResource("RectangleShape2D_jjgbg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=817139750]
