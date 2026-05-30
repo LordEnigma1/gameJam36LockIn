@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://u37wxdo2r631"]
 
 [ext_resource type="PackedScene" uid="uid://c8nno8k74iwsu" path="res://Scenes/player.tscn" id="1_jjgbg"]
-[ext_resource type="Texture2D" uid="uid://7siec88qjipj" path="res://Assets/separate/texture_16px 7.png" id="2_bo1nx"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jjgbg"]
+load_path = "res://.godot/imported/texture_16px 7.png-0f3b5a39617e2ab3d348dba62e2dca32.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jjgbg"]
 size = Vector2(1158, 20)
@@ -14,7 +16,7 @@ position = Vector2(-50, -2)
 [node name="Texture16Px7" type="Sprite2D" parent="." unique_id=1197405948]
 position = Vector2(53.250015, 167.00002)
 scale = Vector2(28.21875, 3.1875)
-texture = ExtResource("2_bo1nx")
+texture = SubResource("CompressedTexture2D_jjgbg")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2034513906]
 
