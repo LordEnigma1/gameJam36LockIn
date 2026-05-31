@@ -4,12 +4,14 @@ extends Node2D
 @onready var vision_polygon: Polygon2D = $Polygon2D
 @export var scan_speed: float = 2.0
 @export var scan_angle: float = 45.0
+
 # Scan variables
 var start_rotation: float
 var scan_time: float = 0.0
 var has_spotted_player: bool = false
+
 # Timer variables
-@onready var caught_label: Label = $"../../CanvasLayer/Control/caughtLabel"   # Timer countdown
+@onready var caught_label: Label = $"../../CanvasLayer/Control/caughtLabel"   
 @onready var status_label: Label = $"../../CanvasLayer/Control/statusLabel"
 @onready var caught_timer: Timer = $caughtTime
 @onready var slowmo_timer: Timer = $slowmoTime
@@ -20,14 +22,21 @@ var parent_npc: PossessableCharacter
 
 
 func _ready() -> void:
+	slowmo_timer.wait_time = 0.3
 	start_rotation = rotation
 	var parent = get_parent()
 	if parent is PossessableCharacter:
 		parent_npc = parent
 		line_of_sight.add_exception(parent)
+		
+	status_label.position = Vector2(432.5, 0)
+	caught_label.position = Vector2(520.0, 66.0)
 	caught_label.visible = false
 	status_label.visible = false
+	status_label.position = Vector2(432.5, 0)
+	caught_label.position = Vector2(520.0, 66.0)
 	slowmo_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+
 
 func _physics_process(delta: float) -> void:
 	if parent_npc and parent_npc.is_possessed:
@@ -43,11 +52,13 @@ func _physics_process(delta: float) -> void:
 
 	check_vision()
 
-	# Update countdown label every frame
 	if not caught_timer.is_stopped():
 		caught_label.text = "%.1f" % caught_timer.time_left
 
 func check_vision() -> void:
+	if has_spotted_player:  
+		return
+	
 	var bodies = vision_area.get_overlapping_bodies()
 
 	for body in bodies:
@@ -68,6 +79,8 @@ func check_vision() -> void:
 				var thing_we_hit = line_of_sight.get_collider()
 
 				if thing_we_hit == body:
+					status_label.position = Vector2(432.5, 0)
+					caught_label.position = Vector2(520.0, 66.0)
 					caught_label.visible = true
 					status_label.visible = true
 					status_label.text = "DETECTED"
@@ -85,35 +98,46 @@ func check_vision() -> void:
 func _reset_caught() -> void:
 	if not caught_timer.is_stopped():
 		caught_timer.stop()
+	if pulse_tween:
+		pulse_tween.kill()
+		pulse_tween = null
 	caught_label.visible = false
 	caught_label.text = ""
 	status_label.visible = false
 	status_label.text = ""
-	status_label.modulate = Color(1.0, 1.0, 1.0)
-	if pulse_tween:
-		pulse_tween.kill()
+	status_label.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	status_label.position = Vector2(432.5, 0)
+	caught_label.position = Vector2(520.0, 66.0)
+	has_spotted_player = false
+
 
 func _start_pulse() -> void:
 	if pulse_tween:
 		pulse_tween.kill()
 	pulse_tween = create_tween()
 	pulse_tween.set_loops()
-	# Pulse both labels together
 	pulse_tween.tween_property(status_label, "modulate:a", 0.2, 0.2)
 	pulse_tween.tween_property(status_label, "modulate:a", 1.0, 0.2)
 
-func _on_caught_timer_timeout() -> void:
+# Caught functions
+func _on_caught_time_timeout():
+	has_spotted_player = true
 	if pulse_tween:
 		pulse_tween.kill()
-	# Timer label disappears, status switches to CAUGHT in red
+		pulse_tween = null
+	
 	caught_label.visible = false
+	status_label.position = Vector2(430.0,66.0)
 	status_label.text = "CAUGHT"
-	status_label.modulate = Color(1.0, 0.0, 0.0)
-	status_label.modulate.a = 1.0  # Make sure fully visible
+	status_label.modulate = Color(1.0, 0.0, 0.0, 1.0)
 	status_label.visible = true
+	pulse_tween = create_tween()
+	pulse_tween.set_loops()
+	pulse_tween.tween_property(status_label, "modulate:a", 0.2, 0.2)
+	pulse_tween.tween_property(status_label, "modulate:a", 1.0, 0.2)
 	Engine.time_scale = 0.15
 	slowmo_timer.start()
 
 func _on_slowmo_time_timeout() -> void:
 	Engine.time_scale = 1.0
-	get_tree().change_scene_to_packed(main_scene)
+	get_tree().reload_current_scene()
