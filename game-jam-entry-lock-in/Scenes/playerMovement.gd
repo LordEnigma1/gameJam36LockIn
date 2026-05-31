@@ -8,7 +8,7 @@ class_name PossessableCharacter
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 var gravity: float = 500.0
-
+var outline_shader: Shader = preload("res://Scenes/outline_shader.gdshader")
 
 # Dash variables
 const DASH_SPEED: float = 1000.0
@@ -17,7 +17,6 @@ var can_dash: bool = true
 @onready var dash_timer: Timer = $dashTimer
 @onready var dash_cooldown: Timer = $dashCooldown
 
-
 # Jump variables
 @export var jump_speed: float = -550.0          
 @export var base_gravity: float = 1400.0        
@@ -25,18 +24,41 @@ var can_dash: bool = true
 @export var jump_cut_multiplier: float = 0.35   
 var is_jumping: bool = false
 
-#Edge check variables
+# Edge check variables
 @onready var edge_check: RayCast2D = $edgeCheck
+@onready var wall_check: RayCast2D = $wallCheck
 @export var patrol_speed: float = 80.0
 var patrol_direction: float = 1.0  # 1.0 = right, -1.0 = left
+var flip_cooldown: float = 0.0
+
+
+func _ready() -> void:
+	_update_collision_layers()
+	
+	if animated_sprite_2d:
+		var shader_mat = ShaderMaterial.new()
+		shader_mat.shader = outline_shader
+		
+		shader_mat.set_shader_parameter("line_thickness", 0.0) 
+		
+		animated_sprite_2d.material = shader_mat
+
+
+func _update_collision_layers() -> void:
+	if is_possessed:
+		set_collision_layer_value(3, true)   
+		set_collision_layer_value(2, false)  
+	else:
+		set_collision_layer_value(3, false)  
+		set_collision_layer_value(2, true)
+
 
 func _physics_process(delta: float) -> void:
 	var input_dir: float = 0.0
 	var want_jump: bool = false
 	var want_jump_release: bool = false
 	var want_dash: bool = false
-	_patrol(delta)
-	move_and_slide()
+
 
 	if is_possessed:
 		input_dir = Input.get_axis("left", "right")
@@ -44,73 +66,107 @@ func _physics_process(delta: float) -> void:
 		want_jump_release = Input.is_action_just_released("jump")
 		want_dash = Input.is_action_just_pressed("dash")
 	else:
-		pass # Future NPC AI goes here 
+		_patrol(delta) 
 
-	
+
 	if not is_on_floor() or velocity.y < 0:
-		animated_sprite_2d.play("jump")
 		var current_gravity = base_gravity
 		if velocity.y > 0:
 			current_gravity *= fall_gravity_multiplier
 		velocity.y += current_gravity * delta
-		
 	else:
 		is_jumping = false
-		animated_sprite_2d.play("move")
 
-	# Jump
+
 	if want_jump and is_on_floor():
 		velocity.y = jump_speed
 		is_jumping = true
 
-	# Variable jump height
 	if want_jump_release and is_jumping and velocity.y < 0:
 		velocity.y *= jump_cut_multiplier
 		is_jumping = false
 
-	# Dash
+
 	if want_dash and can_dash:
 		is_dashing = true
 		can_dash = false
 		dash_timer.start()
 		dash_cooldown.start()
-		animated_sprite_2d.play("dash")
 
-	# Movement
-	if input_dir != 0:
-		velocity.x = input_dir * (DASH_SPEED if is_dashing else speed)
-		animated_sprite_2d.flip_h = (input_dir < 0)
-	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
-	
-	if not is_dashing:
+	if is_possessed:
 		if input_dir != 0:
-			animated_sprite_2d.play("move")
+			velocity.x = input_dir * (DASH_SPEED if is_dashing else speed)
+			set_facing_direction(input_dir) 
+		else:
+			velocity.x = move_toward(velocity.x, 0, speed)
+
+	if not is_on_floor():
+		animated_sprite_2d.play("jump")
+	elif is_dashing:
+		animated_sprite_2d.play("dash")
+	elif velocity.x != 0:
+		animated_sprite_2d.play("move")
 	else:
-			animated_sprite_2d.play("dash")
-	
+		if animated_sprite_2d.sprite_frames.has_animation("idle"):
+			animated_sprite_2d.play("idle") 
+		else:
+			animated_sprite_2d.play("move")
+
 	move_and_slide()
 
-# Dash functions
+# --- Ability Functions ---
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
 
 func _on_dash_cooldown_timeout() -> void:
 	can_dash = true
 
-#Edge check functions
-func _patrol(_delta: float) -> void:
-	if is_possessed:
-		velocity.x = 0  
-		return
+# --- Patrol & Facing Functions ---
+func _patrol(delta: float) -> void:
+	if flip_cooldown > 0:
+		flip_cooldown -= delta
 	
-	if not edge_check.is_colliding() or is_on_wall():
-		_flip_direction()
+	if flip_cooldown <= 0:
+		if not edge_check.is_colliding() or wall_check.is_colliding():
+			set_facing_direction(patrol_direction * -1.0)
+			flip_cooldown = 0.5
+	
 	velocity.x = patrol_speed * patrol_direction
 
-func _flip_direction() -> void:
-	patrol_direction *= -1.0
-	# Flip the edgeCheck raycast to match new direction
-	edge_check.scale.x *= -1.0
-	# Flip sprite if you have one
-	animated_sprite_2d.flip_h = (patrol_direction < 0)
+func set_facing_direction(dir: float) -> void:
+	if dir == 0:
+		return
+		
+	var facing = 1.0 if dir > 0 else -1.0
+	patrol_direction = facing
+	
+	animated_sprite_2d.flip_h = (facing < 0)
+	
+	if eject_marker:
+		eject_marker.position.x = abs(eject_marker.position.x) * facing
+
+	if edge_check:
+		edge_check.position.x = abs(edge_check.position.x) * facing
+		edge_check.target_position.x = abs(edge_check.target_position.x) * facing
+
+	if wall_check:
+		wall_check.position.x = abs(wall_check.position.x) * facing
+		wall_check.target_position.x = abs(wall_check.target_position.x) * facing
+
+	var vision_pivot = get_node_or_null("VisionPivot")
+	if vision_pivot and vision_pivot.has_method("set_facing"):
+		vision_pivot.set_facing(facing)
+
+func show_possessable_outline() -> void:
+	if is_possessed:
+		hide_possessable_outline()
+		return
+		
+	if animated_sprite_2d and animated_sprite_2d.material:
+		animated_sprite_2d.material.set_shader_parameter("line_thickness", 1.5)
+
+func hide_possessable_outline() -> void:
+	if animated_sprite_2d and animated_sprite_2d.material:
+		animated_sprite_2d.material.set_shader_parameter("line_thickness", 0.0)
+
+ 

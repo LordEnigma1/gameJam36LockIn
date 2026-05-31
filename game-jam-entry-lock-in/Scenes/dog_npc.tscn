@@ -1,8 +1,15 @@
 [gd_scene format=3 uid="uid://bjfkb8epphwlh"]
 
 [ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_1bj8w"]
+[ext_resource type="Shader" uid="uid://c8wo68jlyowv7" path="res://Scenes/outline_shader.gdshader" id="1_wjvyl"]
 [ext_resource type="Texture2D" uid="uid://bqkx6g1cnn0hr" path="res://assets/npcs/dog.png" id="2_1bj8w"]
 [ext_resource type="Script" uid="uid://ci2s571gy2ogm" path="res://Scenes/vision_pivot.gd" id="3_litm7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_litm7"]
+resource_local_to_scene = true
+shader = ExtResource("1_wjvyl")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g5w2w"]
 
@@ -116,7 +123,8 @@ animations = [{
 }]
 
 [node name="dogNpc" type="CharacterBody2D" unique_id=2146960868 groups=["possessable"]]
-collision_layer = 4
+material = SubResource("ShaderMaterial_litm7")
+collision_layer = 2
 script = ExtResource("1_1bj8w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1779866853]
@@ -139,15 +147,20 @@ rotation = 1.5707964
 [node name="VisionPivot" type="Node2D" parent="." unique_id=870424885]
 script = ExtResource("3_litm7")
 scan_speed = 0.5
+scan_angle = 20.0
+vision_range = 300.0
 
 [node name="Polygon2D" type="Polygon2D" parent="VisionPivot" unique_id=1260151026]
 color = Color(2.1300592, 0, 0, 0.28235295)
 polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
 
 [node name="LineOfSight" type="RayCast2D" parent="VisionPivot" unique_id=344682929]
-target_position = Vector2(299, -1)
+target_position = Vector2(163, 0)
+collision_mask = 7
+hit_from_inside = true
 
 [node name="VisionArea" type="Area2D" parent="VisionPivot" unique_id=2022346567]
+collision_mask = 6
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionPivot/VisionArea" unique_id=2147162856]
 polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
@@ -158,7 +171,10 @@ wait_time = 1.5
 [node name="slowmoTime" type="Timer" parent="VisionPivot" unique_id=1111430212]
 
 [node name="edgeCheck" type="RayCast2D" parent="." unique_id=1699036423]
-target_position = Vector2(38, 17)
+target_position = Vector2(30, 26)
+
+[node name="wallCheck" type="RayCast2D" parent="." unique_id=299426268]
+target_position = Vector2(43, 0)
 
 [connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]

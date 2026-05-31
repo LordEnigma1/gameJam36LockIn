@@ -3,6 +3,7 @@ extends Node2D
 @onready var blob_body: PossessableCharacter = get_parent() 
 @onready var possession_area: Area2D = $possessionArea
 @onready var camera: Camera2D = $"../Camera2D" 
+@onready var animated_sprite_2d: AnimatedSprite2D = $"../AnimatedSprite2D"
 
 var currently_possessed_npc: PossessableCharacter = null
 
@@ -12,6 +13,7 @@ var currently_possessed_npc: PossessableCharacter = null
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("possess"): 
+		animated_sprite_2d.play("possess")
 		if currently_possessed_npc == null:
 			try_possess()
 		else:
@@ -44,6 +46,7 @@ func execute_possession(target_npc: PossessableCharacter) -> void:
 	
 	target_npc.is_possessed = true
 	currently_possessed_npc = target_npc
+	
 
 func eject() -> void:
 	if currently_possessed_npc.eject_marker:
@@ -70,3 +73,14 @@ func eject() -> void:
 	
 	currently_possessed_npc.queue_free()
 	currently_possessed_npc = null
+
+# Inside your Slime / Ghost Player script:
+
+func _on_possession_area_body_entered(body: Node2D) -> void:
+	if body.has_method("show_possessable_outline"):
+		body.show_possessable_outline()
+
+
+func _on_possession_area_body_exited(body: Node2D) -> void:
+	if body.has_method("hide_possessable_outline"):
+		body.hide_possessable_outline() # Replace with function body.

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c8nno8k74iwsu" path="res://Scenes/player.tscn" id="1_jjgbg"]
 [ext_resource type="Texture2D" uid="uid://c7rje62fc8ba5" path="res://assets/tilemap/industrialSpriteSheet.png" id="2_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://dg1vrp1pr5ig5" path="res://Scenes/police_npc.tscn" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://core7wjfvy4rl" path="res://Scenes/control.gd" id="3_21xkr"]
 [ext_resource type="PackedScene" uid="uid://bjfkb8epphwlh" path="res://Scenes/dog_npc.tscn" id="4_jjvhh"]
 [ext_resource type="AudioStream" uid="uid://tsne0kckveki" path="res://assets/musicandsounds/Assault - angry - tension - battle.mp3" id="4_kry3j"]
 
@@ -235,7 +236,9 @@ texture = ExtResource("2_bo1nx")
 10:12/0 = 0
 11:12/0 = 0
 12:12/0 = 0
+12:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 13:12/0 = 0
+13:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 14:12/0 = 0
 15:12/0 = 0
 16:12/0 = 0
@@ -255,7 +258,9 @@ texture = ExtResource("2_bo1nx")
 10:13/0 = 0
 11:13/0 = 0
 12:13/0 = 0
+12:13/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 13:13/0 = 0
+13:13/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 14:13/0 = 0
 15:13/0 = 0
 16:13/0 = 0
@@ -330,10 +335,6 @@ metadata/_edit_vertical_guides_ = [527.0]
 [node name="player" parent="." unique_id=1722511285 instance=ExtResource("1_jjgbg")]
 position = Vector2(-50, -2)
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=14179072]
-tile_map_data = PackedByteArray("AAD0/wYAAAAAAAwAAAD0/wcAAAAAAA0AAAD1/wYAAAABAAwAAAD1/wcAAAABAA0AAAD2/wYAAAAAAAwAAAD2/wcAAAAAAA0AAAD3/wYAAAABAAwAAAD3/wcAAAABAA0AAAD4/wYAAAAAAAwAAAD4/wcAAAAAAA0AAAD5/wYAAAABAAwAAAD5/wcAAAABAA0AAAD6/wYAAAAAAAwAAAD6/wcAAAAAAA0AAAD7/wYAAAABAAwAAAD7/wcAAAABAA0AAAD8/wYAAAAAAAwAAAD8/wcAAAAAAA0AAAD9/wYAAAABAAwAAAD9/wcAAAABAA0AAAD+/wYAAAAAAAwAAAD+/wcAAAAAAA0AAAD//wYAAAABAAwAAAD//wcAAAABAA0AAAAAAAYAAAAAAAwAAAAAAAcAAAAAAA0AAAABAAYAAAABAAwAAAABAAcAAAABAA0AAAACAAYAAAAAAAwAAAACAAcAAAAAAA0AAAADAAYAAAABAAwAAAADAAcAAAABAA0AAAAEAAYAAAAAAAwAAAAEAAcAAAAAAA0AAAAFAAYAAAABAAwAAAAFAAcAAAABAA0AAAAGAAYAAAAAAAwAAAAGAAcAAAAAAA0AAAAHAAYAAAABAAwAAAAHAAcAAAABAA0AAAAIAAYAAAAAAAwAAAAIAAcAAAAAAA0AAAAJAAYAAAABAAwAAAAJAAcAAAABAA0AAAAIAAQAAAAMAA4AAAAIAAUAAAAMAA8AAAAJAAQAAAANAA4AAAAJAAUAAAANAA8AAAAIAAIAAAAMAA4AAAAIAAMAAAAMAA8AAAAJAAIAAAANAA4AAAAJAAMAAAANAA8AAAA=")
-tile_set = SubResource("TileSet_jjvhh")
-
 [node name="policeNpc" parent="." unique_id=94176087 instance=ExtResource("3_8gbba")]
 position = Vector2(0, 32)
 
@@ -346,6 +347,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_21xkr")
 metadata/_edit_use_anchors_ = true
 
 [node name="statusLabel" type="Label" parent="CanvasLayer/Control" unique_id=2039899363]
@@ -382,3 +384,9 @@ stream = ExtResource("4_kry3j")
 volume_db = 2.0
 autoplay = true
 parameters/looping = true
+
+[node name="scenario" type="Node2D" parent="." unique_id=761454139]
+
+[node name="floorAndWalls" type="TileMapLayer" parent="scenario" unique_id=14179072]
+tile_map_data = PackedByteArray("AAD0/wYAAAAAAAwAAAD0/wcAAAAAAA0AAAD1/wYAAAABAAwAAAD1/wcAAAABAA0AAAD2/wYAAAAAAAwAAAD2/wcAAAAAAA0AAAD3/wYAAAABAAwAAAD3/wcAAAABAA0AAAD4/wYAAAAAAAwAAAD4/wcAAAAAAA0AAAD5/wYAAAABAAwAAAD5/wcAAAABAA0AAAD6/wYAAAAAAAwAAAD6/wcAAAAAAA0AAAD7/wYAAAABAAwAAAD7/wcAAAABAA0AAAD8/wYAAAAAAAwAAAD8/wcAAAAAAA0AAAD9/wYAAAABAAwAAAD9/wcAAAABAA0AAAD+/wYAAAAAAAwAAAD+/wcAAAAAAA0AAAD//wYAAAABAAwAAAD//wcAAAABAA0AAAAAAAYAAAAAAAwAAAAAAAcAAAAAAA0AAAABAAYAAAABAAwAAAABAAcAAAABAA0AAAACAAYAAAAAAAwAAAACAAcAAAAAAA0AAAADAAYAAAABAAwAAAADAAcAAAABAA0AAAAEAAYAAAAAAAwAAAAEAAcAAAAAAA0AAAAFAAYAAAABAAwAAAAFAAcAAAABAA0AAAAGAAYAAAAAAAwAAAAGAAcAAAAAAA0AAAAHAAYAAAABAAwAAAAHAAcAAAABAA0AAAAIAAYAAAAAAAwAAAAIAAcAAAAAAA0AAAAJAAYAAAABAAwAAAAJAAcAAAABAA0AAAA=")
+tile_set = SubResource("TileSet_jjvhh")

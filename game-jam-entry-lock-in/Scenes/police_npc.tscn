@@ -1,9 +1,16 @@
 [gd_scene format=3 uid="uid://dg1vrp1pr5ig5"]
 
+[ext_resource type="Shader" uid="uid://c8wo68jlyowv7" path="res://Scenes/outline_shader.gdshader" id="1_k0vmg"]
 [ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_vl2al"]
 [ext_resource type="Texture2D" uid="uid://cy6ruuw46ouvw" path="res://assets/player/spritePlayerSheet.png" id="2_0hkck"]
 [ext_resource type="Script" uid="uid://ci2s571gy2ogm" path="res://Scenes/vision_pivot.gd" id="3_6x6wt"]
 [ext_resource type="Texture2D" uid="uid://ciodtdepdufsq" path="res://assets/guardia/Walk (1).png" id="3_bkmsp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u0s1c"]
+resource_local_to_scene = true
+shader = ExtResource("1_k0vmg")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
 size = Vector2(29, 67)
@@ -99,7 +106,8 @@ animations = [{
 }]
 
 [node name="policeNpc" type="CharacterBody2D" unique_id=94176087 groups=["possessable"]]
-collision_layer = 4
+material = SubResource("ShaderMaterial_u0s1c")
+collision_layer = 2
 script = ExtResource("1_vl2al")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=767524209]
@@ -123,15 +131,23 @@ rotation = 1.5707964
 [node name="VisionPivot" type="Node2D" parent="." unique_id=1630092012]
 script = ExtResource("3_6x6wt")
 scan_speed = 0.5
+scan_angle = 20.0
+vision_range = 300.0
 
 [node name="Polygon2D" type="Polygon2D" parent="VisionPivot" unique_id=1423530396]
+visible = false
 color = Color(2.1300592, 0, 0, 0.28235295)
 polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
 
 [node name="LineOfSight" type="RayCast2D" parent="VisionPivot" unique_id=617997084]
-target_position = Vector2(299, -1)
+position = Vector2(-3, -18)
+target_position = Vector2(67, 0)
+collision_mask = 7
+hit_from_inside = true
 
 [node name="VisionArea" type="Area2D" parent="VisionPivot" unique_id=2029792557]
+visible = false
+collision_mask = 6
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionPivot/VisionArea" unique_id=1630472710]
 polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
@@ -142,7 +158,10 @@ wait_time = 1.5
 [node name="slowmoTime" type="Timer" parent="VisionPivot" unique_id=1220068237]
 
 [node name="edgeCheck" type="RayCast2D" parent="." unique_id=1444393654]
-target_position = Vector2(27, 44)
+target_position = Vector2(32, 50)
+
+[node name="wallCheck" type="RayCast2D" parent="." unique_id=857438580]
+target_position = Vector2(42, 4)
 
 [connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]
