@@ -40,11 +40,10 @@ scale = Vector2(0.20918389, 0.19041866)
 texture_normal = ExtResource("2_4hy44")
 ignore_texture_size = true
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="TextureButton" unique_id=1741669343]
-position = Vector2(-19.121948, -63.019035)
-scale = Vector2(4.7804832, 5.2515864)
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1741669343]
+position = Vector2(33, 10)
+scale = Vector2(1.0000001, 1)
 stream = ExtResource("4_158mb")
-volume_db = 2.047
-autoplay = true
+volume_db = 1.638
 
 [connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
