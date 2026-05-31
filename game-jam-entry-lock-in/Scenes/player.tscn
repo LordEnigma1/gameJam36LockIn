@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://c8nno8k74iwsu"]
+
+[ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://cy6ruuw46ouvw" path="res://assets/player/spritePlayerSheet.png" id="2_cvnsp"]
+[ext_resource type="Script" uid="uid://ytynqewpv8c7" path="res://Scenes/playerControl.gd" id="3_vgqql"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x3wgy"]
+radius = 13.0
+height = 34.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkybt"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6t5aa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6t5aa")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgqql")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkybt")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fkybt"]
+radius = 19.0
+height = 52.0
+
+[node name="player" type="CharacterBody2D" unique_id=1722511285 groups=["possessable"]]
+script = ExtResource("1_6t5aa")
+is_possessed = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=680300575]
+shape = SubResource("CapsuleShape2D_x3wgy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=452701996]
+sprite_frames = SubResource("SpriteFrames_6t5aa")
+animation = &"move"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2058491844]
+
+[node name="dashTimer" type="Timer" parent="." unique_id=2040499487]
+wait_time = 0.2
+
+[node name="dashCooldown" type="Timer" parent="." unique_id=1377460482]
+
+[node name="possessionMechanic" type="Node2D" parent="." unique_id=1318690884]
+script = ExtResource("3_vgqql")
+
+[node name="possessionArea" type="Area2D" parent="possessionMechanic" unique_id=607529587]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="possessionMechanic/possessionArea" unique_id=1238487290]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_fkybt")
+
+[node name="ejectMarker" type="Marker2D" parent="." unique_id=247456070]
+
+[connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]

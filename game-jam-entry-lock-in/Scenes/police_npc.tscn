@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://dg1vrp1pr5ig5"]
+
+[ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_vl2al"]
+[ext_resource type="Texture2D" uid="uid://cy6ruuw46ouvw" path="res://assets/player/spritePlayerSheet.png" id="2_0hkck"]
+[ext_resource type="Script" uid="uid://ci2s571gy2ogm" path="res://Scenes/vision_pivot.gd" id="3_6x6wt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6x6wt"]
+atlas = ExtResource("2_0hkck")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bkmsp"]
+atlas = ExtResource("2_0hkck")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6x6wt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6x6wt")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bkmsp")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[node name="policeNpc" type="CharacterBody2D" unique_id=94176087 groups=["possessable"]]
+script = ExtResource("1_vl2al")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=767524209]
+shape = SubResource("RectangleShape2D_0hkck")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=31265239]
+sprite_frames = SubResource("SpriteFrames_6x6wt")
+animation = &"move"
+
+[node name="dashTimer" type="Timer" parent="." unique_id=1959019011]
+wait_time = 0.2
+
+[node name="dashCooldown" type="Timer" parent="." unique_id=1917920245]
+
+[node name="ejectMarker" type="Marker2D" parent="." unique_id=845956257]
+position = Vector2(12, 2)
+rotation = 1.5707964
+
+[node name="VisionPivot" type="Node2D" parent="." unique_id=1630092012]
+script = ExtResource("3_6x6wt")
+scan_speed = 0.5
+
+[node name="Polygon2D" type="Polygon2D" parent="VisionPivot" unique_id=1423530396]
+color = Color(2.1300592, 0, 0, 0.28235295)
+polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
+
+[node name="LineOfSight" type="RayCast2D" parent="VisionPivot" unique_id=617997084]
+target_position = Vector2(299, -1)
+
+[node name="VisionArea" type="Area2D" parent="VisionPivot" unique_id=2029792557]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionPivot/VisionArea" unique_id=1630472710]
+polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
+
+[node name="caughtTime" type="Timer" parent="VisionPivot" unique_id=275503080]
+wait_time = 1.5
+
+[node name="slowmoTime" type="Timer" parent="VisionPivot" unique_id=1220068237]
+
+[connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]
+[connection signal="timeout" from="VisionPivot/caughtTime" to="VisionPivot" method="_on_caught_time_timeout"]
+[connection signal="timeout" from="VisionPivot/slowmoTime" to="VisionPivot" method="_on_slowmo_time_timeout"]
