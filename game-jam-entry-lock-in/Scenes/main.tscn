@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c7rje62fc8ba5" path="res://assets/tilemap/industrialSpriteSheet.png" id="2_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://dg1vrp1pr5ig5" path="res://Scenes/police_npc.tscn" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://bjfkb8epphwlh" path="res://Scenes/dog_npc.tscn" id="4_jjvhh"]
+[ext_resource type="AudioStream" uid="uid://tsne0kckveki" path="res://assets/musicandsounds/Assault - angry - tension - battle.mp3" id="4_kry3j"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8gbba"]
 texture = ExtResource("2_bo1nx")
@@ -335,6 +336,11 @@ tile_set = SubResource("TileSet_jjvhh")
 
 [node name="policeNpc" parent="." unique_id=94176087 instance=ExtResource("3_8gbba")]
 position = Vector2(0, 32)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="policeNpc" unique_id=1754895700]
+stream = ExtResource("4_kry3j")
+volume_db = 2.76
+autoplay = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1865473842]
 

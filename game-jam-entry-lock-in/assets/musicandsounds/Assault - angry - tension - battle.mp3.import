@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://tsne0kckveki"
+path="res://.godot/imported/Assault - angry - tension - battle.mp3-3306c17465d2e0642729f1ffa93c14f1.mp3str"
+
+[deps]
+
+source_file="res://assets/musicandsounds/Assault - angry - tension - battle.mp3"
+dest_files=["res://.godot/imported/Assault - angry - tension - battle.mp3-3306c17465d2e0642729f1ffa93c14f1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
