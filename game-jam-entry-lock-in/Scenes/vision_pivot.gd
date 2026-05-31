@@ -24,6 +24,7 @@ var is_detecting: bool = false
 
 
 func _ready() -> void:
+	slowmo_timer.wait_time = 0.3
 	start_rotation = rotation
 	var parent = get_parent()
 	if parent is PossessableCharacter:
@@ -34,10 +35,8 @@ func _ready() -> void:
 func _get_labels() -> void:
 	if caught_label == null:
 		caught_label = get_tree().current_scene.get_node("CanvasLayer/Control/caughtLabel")
-		print(name, " found caught_label: ", caught_label)
 	if status_label == null:
 		status_label = get_tree().current_scene.get_node("CanvasLayer/Control/statusLabel")
-		print(name, " found status_label: ", status_label)
 		
 func _physics_process(delta: float) -> void:
 	_get_labels()
