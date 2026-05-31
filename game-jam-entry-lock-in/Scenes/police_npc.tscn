@@ -40,6 +40,10 @@ region = Rect2(240, 79, 24, 73)
 atlas = ExtResource("3_bkmsp")
 region = Rect2(288, 79, 25, 73)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_6sc5w"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(202, 179, 23, 70)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_1y61g"]
 atlas = ExtResource("3_bkmsp")
 region = Rect2(56, 155, 56, 94)
@@ -70,6 +74,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6sc5w")
+}],
+"loop": true,
+"name": &"idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -110,10 +122,6 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
 size = Vector2(28, 68)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hqtyh"]
-atlas = ExtResource("3_bkmsp")
-region = Rect2(0, 159, 44, 81)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_x4vdi"]
 atlas = ExtResource("3_bkmsp")
 region = Rect2(0, 0, 34, 73)
@@ -142,8 +150,50 @@ region = Rect2(240, 0, 24, 70)
 atlas = ExtResource("3_bkmsp")
 region = Rect2(288, 0, 25, 71)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p0rh"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(149, 174, 23, 75)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtyh"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(0, 159, 44, 81)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_6x6wt"]
 animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_x4vdi")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_tg0yn")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_4xuc1")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_mw8bh")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_gd57y")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_pcw1e")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_em8ue")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1p0rh")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hqtyh")
@@ -186,11 +236,12 @@ script = ExtResource("1_vl2al")
 possessed_sprite_frames = SubResource("SpriteFrames_tg0yn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=767524209]
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_0hkck")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=31265239]
 sprite_frames = SubResource("SpriteFrames_6x6wt")
-animation = &"move"
+animation = &"idle"
 
 [node name="dashTimer" type="Timer" parent="." unique_id=1959019011]
 wait_time = 0.2

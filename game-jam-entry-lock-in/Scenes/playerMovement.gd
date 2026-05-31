@@ -174,28 +174,36 @@ func hide_possessable_outline() -> void:
 func start_possession_sequence() -> void:
 	if is_possessed or is_incubating or is_incubation_active:
 		return
-
 	is_incubation_active = true
 	hide_possessable_outline()
-
 	var vision_pivot = get_node_or_null("VisionPivot")
 	if vision_pivot:
 		var polygon = vision_pivot.get_node_or_null("Polygon2D")
 		if polygon:
 			polygon.visible = false
-
+	
+	var tween: Tween = null
 	if animated_sprite_2d and animated_sprite_2d.material:
-		animated_sprite_2d.material.set_shader_parameter("tint", Color(0.5, 1.0, 0.5, 1.0))
-
+		animated_sprite_2d.material.set_shader_parameter("tint", Color(1.0, 1.0, 1.0, 1.0))
+		tween = create_tween()
+		tween.tween_method(
+			func(c: Color):
+				animated_sprite_2d.material.set_shader_parameter("tint", c),
+			Color(1.0, 1.0, 1.0, 1.0),
+			Color(0.2, 1.0, 0.2, 1.0),
+			15.0
+		)
+	
 	await get_tree().create_timer(15.0).timeout
-
+	
+	if tween:
+		tween.kill()
+	
 	if possessed_sprite_frames and animated_sprite_2d:
 		animated_sprite_2d.sprite_frames = possessed_sprite_frames
 		animated_sprite_2d.play()
-
 	if animated_sprite_2d and animated_sprite_2d.material:
 		animated_sprite_2d.material.set_shader_parameter("tint", Color(1.0, 1.0, 1.0, 1.0))
-
 	is_incubation_active = false
 	is_possessed = true
 	_update_collision_layers()

@@ -11,7 +11,6 @@ var currently_possessed_npc: PossessableCharacter = null
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("possess"):
-		animated_sprite_2d.play("possess")
 		if currently_possessed_npc == null:
 			try_possess()
 		else:
@@ -29,23 +28,28 @@ func try_possess() -> void:
 
 
 func execute_possession(target_npc: PossessableCharacter) -> void:
+	
+	get_tree().paused = true
+	animated_sprite_2d.play("possess")
+	await animated_sprite_2d.animation_finished
+	get_tree().paused = false
+	
 	blob_body.is_possessed = false
 	blob_body.visible = false
+	blob_body.hide_possessable_outline()  
 	blob_body.set_physics_process(false)
 	blob_body.velocity = Vector2.ZERO
 
 	var col_shape = blob_body.get_node_or_null("CollisionShape2D")
 	if col_shape:
 		col_shape.set_deferred("disabled", true)
-
+	
+	possession_area.set_deferred("monitoring", false) 
 	camera.reparent(target_npc)
 	camera.position = Vector2.ZERO
 
 	currently_possessed_npc = target_npc
 
-	# Hand off to the two-phase sequence in PossessableCharacter
-	# Phase 1: green tint, moveable, undetectable
-	# Phase 2 (after 15s): sprite swap, detectable by guards
 	target_npc.start_possession_sequence()
 
 
@@ -65,6 +69,7 @@ func eject() -> void:
 	blob_body.is_possessed = true
 	blob_body.visible = true
 	blob_body.set_physics_process(true)
+	possession_area.set_deferred("monitoring", true)
 
 	var col_shape = blob_body.get_node_or_null("CollisionShape2D")
 	if col_shape:
