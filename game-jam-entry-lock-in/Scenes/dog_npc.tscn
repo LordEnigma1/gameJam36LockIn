@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://bjfkb8epphwlh"]
+
+[ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_1bj8w"]
+[ext_resource type="Texture2D" uid="uid://bqkx6g1cnn0hr" path="res://assets/npcs/dog.png" id="2_1bj8w"]
+[ext_resource type="Script" uid="uid://ci2s571gy2ogm" path="res://Scenes/vision_pivot.gd" id="3_litm7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g5w2w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1bj8w"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(0, 69, 64, 43)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjvyl"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(64, 69, 64, 43)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_litm7"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(128, 69, 64, 43)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5w2w"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(192, 69, 64, 43)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xw7f2"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(1, 32, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3qlb"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(64, 32, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0qigl"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(127, 32, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hm5d"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(190, 32, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_68h65"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(1, 2, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ci3yd"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(64, 2, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fy3e"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(127, 2, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1dj5"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(190, 2, 63, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_clh33"]
+atlas = ExtResource("2_1bj8w")
+region = Rect2(253, 2, 63, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_68h65"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1bj8w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjvyl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_litm7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5w2w")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xw7f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3qlb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0qigl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hm5d")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_68h65")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ci3yd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fy3e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1dj5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_clh33")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[node name="dogNpc" type="CharacterBody2D" unique_id=2146960868 groups=["possessable"]]
+script = ExtResource("1_1bj8w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1779866853]
+shape = SubResource("RectangleShape2D_g5w2w")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1622191235]
+sprite_frames = SubResource("SpriteFrames_68h65")
+animation = &"jump"
+autoplay = "move"
+
+[node name="dashTimer" type="Timer" parent="." unique_id=692343502]
+wait_time = 0.2
+
+[node name="dashCooldown" type="Timer" parent="." unique_id=368343855]
+
+[node name="ejectMarker" type="Marker2D" parent="." unique_id=840950529]
+position = Vector2(12, 2)
+rotation = 1.5707964
+
+[node name="VisionPivot" type="Node2D" parent="." unique_id=870424885]
+script = ExtResource("3_litm7")
+scan_speed = 0.5
+
+[node name="Polygon2D" type="Polygon2D" parent="VisionPivot" unique_id=1260151026]
+color = Color(2.1300592, 0, 0, 0.28235295)
+polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
+
+[node name="LineOfSight" type="RayCast2D" parent="VisionPivot" unique_id=344682929]
+target_position = Vector2(299, -1)
+
+[node name="VisionArea" type="Area2D" parent="VisionPivot" unique_id=2022346567]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionPivot/VisionArea" unique_id=2147162856]
+polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
+
+[node name="caughtTime" type="Timer" parent="VisionPivot" unique_id=555418589]
+wait_time = 1.5
+
+[node name="slowmoTime" type="Timer" parent="VisionPivot" unique_id=1111430212]
+
+[connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]
+[connection signal="timeout" from="VisionPivot/caughtTime" to="VisionPivot" method="_on_caught_time_timeout"]
+[connection signal="timeout" from="VisionPivot/slowmoTime" to="VisionPivot" method="_on_slowmo_time_timeout"]
