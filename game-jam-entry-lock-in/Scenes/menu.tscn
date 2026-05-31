@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bkvo0hh4rl26q" path="res://Scenes/menu.gd" id="1_4hy44"]
 [ext_resource type="Texture2D" uid="uid://dlkneulmdwpf2" path="res://assets/screens/iniciomenu.png" id="1_mae5d"]
 [ext_resource type="Texture2D" uid="uid://bcv32juen8j6y" path="res://assets/tilemap/Captura de pantalla 2026-05-30 204038.png" id="2_4hy44"]
+[ext_resource type="AudioStream" uid="uid://bbumonqdqkin8" path="res://assets/musicandsounds/ogg/menu_4.ogg" id="4_158mb"]
 
 [node name="Control" type="Control" unique_id=2072557176]
 layout_mode = 3
@@ -38,5 +39,11 @@ grow_vertical = 0
 scale = Vector2(0.20918389, 0.19041866)
 texture_normal = ExtResource("2_4hy44")
 ignore_texture_size = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1741669343]
+position = Vector2(33, 10)
+scale = Vector2(1.0000001, 1)
+stream = ExtResource("4_158mb")
+volume_db = 1.638
 
 [connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
