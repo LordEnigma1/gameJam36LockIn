@@ -145,4 +145,4 @@ func _on_caught_time_timeout():
 
 func _on_slowmo_time_timeout() -> void:
 	Engine.time_scale = 1.0
-	get_tree().reload_current_scene()
+	get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
