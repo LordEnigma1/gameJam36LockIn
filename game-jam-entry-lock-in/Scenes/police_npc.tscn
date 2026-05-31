@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_vl2al"]
 [ext_resource type="Texture2D" uid="uid://cy6ruuw46ouvw" path="res://assets/player/spritePlayerSheet.png" id="2_0hkck"]
 [ext_resource type="Script" uid="uid://ci2s571gy2ogm" path="res://Scenes/vision_pivot.gd" id="3_6x6wt"]
+[ext_resource type="Texture2D" uid="uid://cff7iys17c0gl" path="res://assets/guardia/Walk.png" id="3_bkmsp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
 
@@ -10,9 +11,45 @@
 atlas = ExtResource("2_0hkck")
 region = Rect2(64, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bkmsp"]
-atlas = ExtResource("2_0hkck")
-region = Rect2(32, 64, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0vmg"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(0, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u0s1c"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(128, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i40kx"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(256, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7gjlh"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(384, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6oald"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(512, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3vja"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(640, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x4vdi"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(768, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1y61g"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(896, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tg0yn"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(1024, 40, 128, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtyh"]
+atlas = ExtResource("3_bkmsp")
+region = Rect2(1152, 40, 128, 88)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6x6wt"]
 animations = [{
@@ -26,7 +63,34 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bkmsp")
+"texture": SubResource("AtlasTexture_k0vmg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u0s1c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i40kx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7gjlh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6oald")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3vja")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x4vdi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1y61g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tg0yn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtyh")
 }],
 "loop": true,
 "name": &"move",
