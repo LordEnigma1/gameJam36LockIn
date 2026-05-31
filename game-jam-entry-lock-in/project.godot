@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="gameJamEntryLockIn"
-run/main_scene="uid://u37wxdo2r631"
+run/main_scene="uid://dstl61p3lrf5"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
