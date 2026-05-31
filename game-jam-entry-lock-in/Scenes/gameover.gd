@@ -7,7 +7,7 @@ extends Control
 func _on_texture_button_pressed() -> void:
 	
 	audio_stream_player_2d.play()
-	#aaaaaaxdxdxdxdxdaaaaa
+	#aaaaaaxdxdxdxdxdaaaaawwaaaqsqdww
 	
 	await audio_stream_player_2d.finished
 
