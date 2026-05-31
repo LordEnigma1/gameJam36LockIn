@@ -337,11 +337,6 @@ tile_set = SubResource("TileSet_jjvhh")
 [node name="policeNpc" parent="." unique_id=94176087 instance=ExtResource("3_8gbba")]
 position = Vector2(0, 32)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="policeNpc" unique_id=1754895700]
-stream = ExtResource("4_kry3j")
-volume_db = 2.76
-autoplay = true
-
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1865473842]
 
 [node name="Control" type="Control" parent="CanvasLayer" unique_id=1706123268]
@@ -380,4 +375,10 @@ scale = Vector2(4, 4)
 metadata/_edit_use_anchors_ = true
 
 [node name="dogNpc" parent="." unique_id=2146960868 instance=ExtResource("4_jjvhh")]
-position = Vector2(2, -1)
+position = Vector2(-124, -56)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1754895700]
+stream = ExtResource("4_kry3j")
+volume_db = 2.0
+autoplay = true
+parameters/looping = true

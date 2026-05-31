@@ -116,6 +116,7 @@ animations = [{
 }]
 
 [node name="dogNpc" type="CharacterBody2D" unique_id=2146960868 groups=["possessable"]]
+collision_layer = 4
 script = ExtResource("1_1bj8w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1779866853]
@@ -155,6 +156,9 @@ polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
 wait_time = 1.5
 
 [node name="slowmoTime" type="Timer" parent="VisionPivot" unique_id=1111430212]
+
+[node name="edgeCheck" type="RayCast2D" parent="." unique_id=1699036423]
+target_position = Vector2(38, 17)
 
 [connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]

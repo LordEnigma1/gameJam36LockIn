@@ -6,6 +6,7 @@ extends Node2D
 
 var currently_possessed_npc: PossessableCharacter = null
 
+
 @export var eject_force_x: float = 800.0
 @export var eject_force_y: float = 300.0 
 

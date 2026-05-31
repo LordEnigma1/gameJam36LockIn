@@ -25,12 +25,18 @@ var can_dash: bool = true
 @export var jump_cut_multiplier: float = 0.35   
 var is_jumping: bool = false
 
+#Edge check variables
+@onready var edge_check: RayCast2D = $edgeCheck
+@export var patrol_speed: float = 80.0
+var patrol_direction: float = 1.0  # 1.0 = right, -1.0 = left
 
 func _physics_process(delta: float) -> void:
 	var input_dir: float = 0.0
 	var want_jump: bool = false
 	var want_jump_release: bool = false
 	var want_dash: bool = false
+	_patrol(delta)
+	move_and_slide()
 
 	if is_possessed:
 		input_dir = Input.get_axis("left", "right")
@@ -91,3 +97,20 @@ func _on_dash_timer_timeout() -> void:
 
 func _on_dash_cooldown_timeout() -> void:
 	can_dash = true
+
+#Edge check functions
+func _patrol(_delta: float) -> void:
+	if is_possessed:
+		velocity.x = 0  
+		return
+	
+	if not edge_check.is_colliding() or is_on_wall():
+		_flip_direction()
+	velocity.x = patrol_speed * patrol_direction
+
+func _flip_direction() -> void:
+	patrol_direction *= -1.0
+	# Flip the edgeCheck raycast to match new direction
+	edge_check.scale.x *= -1.0
+	# Flip sprite if you have one
+	animated_sprite_2d.flip_h = (patrol_direction < 0)

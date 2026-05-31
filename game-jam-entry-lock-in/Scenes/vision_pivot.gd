@@ -10,35 +10,38 @@ var start_rotation: float
 var scan_time: float = 0.0
 var has_spotted_player: bool = false
 
-# Timer variables
-@onready var caught_label: Label = $"../../CanvasLayer/Control/caughtLabel"   
-@onready var status_label: Label = $"../../CanvasLayer/Control/statusLabel"
+# Caught variables
+var caught_label: Label
+var status_label: Label
+var labels_initialized: bool = false
 @onready var caught_timer: Timer = $caughtTime
 @onready var slowmo_timer: Timer = $slowmoTime
 var main_scene = preload("res://Scenes/main.tscn")
 var pulse_tween: Tween
 var parent_npc: PossessableCharacter
+var is_detecting: bool = false
 
 
 
 func _ready() -> void:
-	slowmo_timer.wait_time = 0.3
 	start_rotation = rotation
 	var parent = get_parent()
 	if parent is PossessableCharacter:
 		parent_npc = parent
 		line_of_sight.add_exception(parent)
-		
-	status_label.position = Vector2(432.5, 0)
-	caught_label.position = Vector2(520.0, 66.0)
-	caught_label.visible = false
-	status_label.visible = false
-	status_label.position = Vector2(432.5, 0)
-	caught_label.position = Vector2(520.0, 66.0)
 	slowmo_timer.process_mode = Node.PROCESS_MODE_ALWAYS
 
-
+func _get_labels() -> void:
+	if caught_label == null:
+		caught_label = get_tree().current_scene.get_node("CanvasLayer/Control/caughtLabel")
+		print(name, " found caught_label: ", caught_label)
+	if status_label == null:
+		status_label = get_tree().current_scene.get_node("CanvasLayer/Control/statusLabel")
+		print(name, " found status_label: ", status_label)
+		
 func _physics_process(delta: float) -> void:
+	_get_labels()
+	
 	if parent_npc and parent_npc.is_possessed:
 		vision_polygon.visible = false
 		return
@@ -56,9 +59,8 @@ func _physics_process(delta: float) -> void:
 		caught_label.text = "%.1f" % caught_timer.time_left
 
 func check_vision() -> void:
-	if has_spotted_player:  
+	if has_spotted_player:
 		return
-	
 	var bodies = vision_area.get_overlapping_bodies()
 
 	for body in bodies:
@@ -67,7 +69,6 @@ func check_vision() -> void:
 
 		var is_correct_class = body is PossessableCharacter
 		var is_possessed_by_player = false
-
 		if is_correct_class:
 			is_possessed_by_player = body.is_possessed
 
@@ -77,23 +78,25 @@ func check_vision() -> void:
 
 			if line_of_sight.is_colliding():
 				var thing_we_hit = line_of_sight.get_collider()
-
 				if thing_we_hit == body:
-					status_label.position = Vector2(432.5, 0)
-					caught_label.position = Vector2(520.0, 66.0)
+					is_detecting = true
 					caught_label.visible = true
 					status_label.visible = true
 					status_label.text = "DETECTED"
-					status_label.modulate = Color(1.0, 1.0, 1.0)  # White
+					status_label.modulate = Color(1.0, 1.0, 1.0)
 					if caught_timer.is_stopped():
 						caught_timer.start()
 						_start_pulse()
 					return
 
-			_reset_caught()
+			if is_detecting:
+				is_detecting = false
+				_reset_caught()
 			return
-
-	_reset_caught()
+			
+	if is_detecting:
+		is_detecting = false
+		_reset_caught()
 
 func _reset_caught() -> void:
 	if not caught_timer.is_stopped():
@@ -101,11 +104,13 @@ func _reset_caught() -> void:
 	if pulse_tween:
 		pulse_tween.kill()
 		pulse_tween = null
-	caught_label.visible = false
-	caught_label.text = ""
-	status_label.visible = false
-	status_label.text = ""
-	status_label.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	if caught_label:
+		caught_label.visible = false
+		caught_label.text = ""
+	if status_label:
+		status_label.visible = false
+		status_label.text = ""
+		status_label.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	status_label.position = Vector2(432.5, 0)
 	caught_label.position = Vector2(520.0, 66.0)
 	has_spotted_player = false

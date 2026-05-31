@@ -49,9 +49,10 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fkybt"]
 radius = 19.0
-height = 52.0
+height = 92.0
 
 [node name="player" type="CharacterBody2D" unique_id=1722511285 groups=["possessable"]]
+collision_mask = 5
 script = ExtResource("1_6t5aa")
 is_possessed = true
 
@@ -73,12 +74,17 @@ wait_time = 0.2
 script = ExtResource("3_vgqql")
 
 [node name="possessionArea" type="Area2D" parent="possessionMechanic" unique_id=607529587]
+collision_layer = 2
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="possessionMechanic/possessionArea" unique_id=1238487290]
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_fkybt")
 
 [node name="ejectMarker" type="Marker2D" parent="." unique_id=247456070]
+
+[node name="edgeCheck" type="RayCast2D" parent="." unique_id=311311217]
+target_position = Vector2(27, 44)
 
 [connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]

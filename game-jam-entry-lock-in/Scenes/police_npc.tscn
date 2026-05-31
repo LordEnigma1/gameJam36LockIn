@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_vl2al"]
 [ext_resource type="Texture2D" uid="uid://cy6ruuw46ouvw" path="res://assets/player/spritePlayerSheet.png" id="2_0hkck"]
 [ext_resource type="Script" uid="uid://ci2s571gy2ogm" path="res://Scenes/vision_pivot.gd" id="3_6x6wt"]
-[ext_resource type="Texture2D" uid="uid://cff7iys17c0gl" path="res://assets/guardia/Walk.png" id="3_bkmsp"]
+[ext_resource type="Texture2D" uid="uid://ciodtdepdufsq" path="res://assets/guardia/Walk (1).png" id="3_bkmsp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkck"]
+size = Vector2(29, 67)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6x6wt"]
 atlas = ExtResource("2_0hkck")
@@ -98,14 +99,17 @@ animations = [{
 }]
 
 [node name="policeNpc" type="CharacterBody2D" unique_id=94176087 groups=["possessable"]]
+collision_layer = 4
 script = ExtResource("1_vl2al")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=767524209]
+position = Vector2(-6.5, 9.5)
 shape = SubResource("RectangleShape2D_0hkck")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=31265239]
 sprite_frames = SubResource("SpriteFrames_6x6wt")
 animation = &"move"
+frame_progress = 0.7301774
 
 [node name="dashTimer" type="Timer" parent="." unique_id=1959019011]
 wait_time = 0.2
@@ -136,6 +140,9 @@ polygon = PackedVector2Array(0, 0, 300, -100, 300, 100)
 wait_time = 1.5
 
 [node name="slowmoTime" type="Timer" parent="VisionPivot" unique_id=1220068237]
+
+[node name="edgeCheck" type="RayCast2D" parent="." unique_id=1444393654]
+target_position = Vector2(27, 44)
 
 [connection signal="timeout" from="dashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="dashCooldown" to="." method="_on_dash_cooldown_timeout"]
