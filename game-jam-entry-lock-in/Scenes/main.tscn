@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c8nno8k74iwsu" path="res://Scenes/player.tscn" id="1_jjgbg"]
 [ext_resource type="Texture2D" uid="uid://c7rje62fc8ba5" path="res://assets/tilemap/industrialSpriteSheet.png" id="2_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://dg1vrp1pr5ig5" path="res://Scenes/police_npc.tscn" id="3_8gbba"]
+[ext_resource type="PackedScene" uid="uid://bjfkb8epphwlh" path="res://Scenes/dog_npc.tscn" id="4_jjvhh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8gbba"]
 texture = ExtResource("2_bo1nx")
@@ -371,3 +372,6 @@ offset_bottom = -69.0
 grow_horizontal = 2
 scale = Vector2(4, 4)
 metadata/_edit_use_anchors_ = true
+
+[node name="dogNpc" parent="." unique_id=2146960868 instance=ExtResource("4_jjvhh")]
+position = Vector2(2, -1)
