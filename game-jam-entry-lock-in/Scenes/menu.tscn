@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://dstl61p3lrf5"]
+
+[ext_resource type="Script" uid="uid://bkvo0hh4rl26q" path="res://Scenes/menu.gd" id="1_4hy44"]
+[ext_resource type="Texture2D" uid="uid://dlkneulmdwpf2" path="res://assets/screens/iniciomenu.png" id="1_mae5d"]
+[ext_resource type="Texture2D" uid="uid://bcv32juen8j6y" path="res://assets/tilemap/Captura de pantalla 2026-05-30 204038.png" id="2_4hy44"]
+
+[node name="Control" type="Control" unique_id=2072557176]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4hy44")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1989028699]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_mae5d")
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=310338788]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -542.0
+offset_top = -619.0
+offset_right = 538.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.20918389, 0.19041866)
+texture_normal = ExtResource("2_4hy44")
+ignore_texture_size = true
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
