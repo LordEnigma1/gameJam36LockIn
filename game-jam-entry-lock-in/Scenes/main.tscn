@@ -2,10 +2,25 @@
 
 [ext_resource type="PackedScene" uid="uid://c8nno8k74iwsu" path="res://Scenes/player.tscn" id="1_jjgbg"]
 [ext_resource type="Texture2D" uid="uid://c7rje62fc8ba5" path="res://assets/tilemap/industrialSpriteSheet.png" id="2_bo1nx"]
+[ext_resource type="Shader" uid="uid://c8wo68jlyowv7" path="res://Scenes/outline_shader.gdshader" id="3_6bp64"]
 [ext_resource type="PackedScene" uid="uid://dg1vrp1pr5ig5" path="res://Scenes/police_npc.tscn" id="3_8gbba"]
 [ext_resource type="Script" uid="uid://core7wjfvy4rl" path="res://Scenes/control.gd" id="3_21xkr"]
 [ext_resource type="PackedScene" uid="uid://bjfkb8epphwlh" path="res://Scenes/dog_npc.tscn" id="4_jjvhh"]
 [ext_resource type="AudioStream" uid="uid://tsne0kckveki" path="res://assets/musicandsounds/Assault - angry - tension - battle.mp3" id="4_kry3j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6bp64"]
+resource_local_to_scene = true
+shader = ExtResource("3_6bp64")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.0
+shader_parameter/tint = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_344ge"]
+resource_local_to_scene = true
+shader = ExtResource("3_6bp64")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.0
+shader_parameter/tint = Color(1, 1, 1, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8gbba"]
 texture = ExtResource("2_bo1nx")
@@ -336,6 +351,7 @@ metadata/_edit_vertical_guides_ = [527.0]
 position = Vector2(-50, -2)
 
 [node name="policeNpc" parent="." unique_id=94176087 instance=ExtResource("3_8gbba")]
+material = SubResource("ShaderMaterial_6bp64")
 position = Vector2(0, 32)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1865473842]
@@ -377,11 +393,12 @@ scale = Vector2(4, 4)
 metadata/_edit_use_anchors_ = true
 
 [node name="dogNpc" parent="." unique_id=2146960868 instance=ExtResource("4_jjvhh")]
+material = SubResource("ShaderMaterial_344ge")
 position = Vector2(-124, -56)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1754895700]
 stream = ExtResource("4_kry3j")
-volume_db = 2.0
+volume_db = 1.0
 autoplay = true
 parameters/looping = true
 

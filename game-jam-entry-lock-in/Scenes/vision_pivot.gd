@@ -21,13 +21,20 @@ var main_scene = preload("res://Scenes/main.tscn")
 var pulse_tween: Tween
 var parent_npc: PossessableCharacter
 var is_detecting: bool = false
-@export var vision_range: float = 200.0 
+@export var vision_range: float = 200.0
 @export var ray_count: int = 20
 
 
 func _ready() -> void:
 	slowmo_timer.wait_time = 0.3
+	caught_timer.wait_time = 1.5
 	start_rotation = rotation
+
+	if status_label:
+		status_label.position = Vector2(432.5, 0)
+	if caught_label:
+		caught_label.position = Vector2(520, 66)
+
 	var parent = get_parent()
 	if parent is PossessableCharacter:
 		parent_npc = parent
@@ -36,12 +43,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# FIX 1: The Ghost Timer. If we possess this guard, clean up their UI/Timers before shutting down!
-	if parent_npc and parent_npc.is_possessed:
-		if is_detecting or not caught_timer.is_stopped():
-			_reset_caught() 
+	if parent_npc and (parent_npc.is_possessed or parent_npc.is_incubation_active):
 		vision_polygon.visible = false
-		vision_polygon.polygon = PackedVector2Array() 
+		vision_polygon.polygon = PackedVector2Array()
 		return
 
 	vision_polygon.visible = true
@@ -58,11 +62,11 @@ func _physics_process(delta: float) -> void:
 		if caught_label:
 			caught_label.text = "%.1f" % caught_timer.time_left
 
+
 func _update_vision_polygon() -> void:
 	var points: PackedVector2Array = [Vector2.ZERO]
 	var angle_step = (scan_angle * 2.0) / float(ray_count)
 	var space_state = get_world_2d().direct_space_state
-
 	var ray_origin = global_position
 
 	for i in range(ray_count + 1):
@@ -87,7 +91,7 @@ func _update_vision_polygon() -> void:
 func check_vision() -> void:
 	if has_spotted_player:
 		return
-	
+
 	var bodies = vision_area.get_overlapping_bodies()
 	var player_found_this_frame = false
 
@@ -96,20 +100,31 @@ func check_vision() -> void:
 			continue
 
 		if body is PossessableCharacter and body.is_possessed:
-			# FIX: Offset the target position upward by 16-20 pixels 
-			# to aim at the character's chest/torso instead of their feet!
+			# Check if body is within the cone angle
+			var to_body = body.global_position - global_position
+			var forward = Vector2(cos(global_rotation), sin(global_rotation))
+			var angle_to_body = rad_to_deg(forward.angle_to(to_body))
+
+			if abs(angle_to_body) > scan_angle:
+				continue
+
+			# Check distance
+			if to_body.length() > vision_range:
+				continue
+
 			var chest_target = body.global_position + Vector2(0, -16)
-			
 			line_of_sight.target_position = line_of_sight.to_local(chest_target)
 			line_of_sight.force_raycast_update()
 
-			if line_of_sight.is_colliding():
+			if not line_of_sight.is_colliding():
+				player_found_this_frame = true
+				break
+			else:
 				var thing_we_hit = line_of_sight.get_collider()
 				if thing_we_hit == body:
 					player_found_this_frame = true
-					break 
+					break
 
-	# Handle UI and Timers
 	if player_found_this_frame:
 		if not is_detecting:
 			is_detecting = true
@@ -148,14 +163,13 @@ func _start_pulse() -> void:
 	if pulse_tween:
 		pulse_tween.kill()
 	if not status_label:
-		return  
+		return
 	pulse_tween = create_tween()
 	pulse_tween.set_loops()
 	pulse_tween.tween_property(status_label, "modulate:a", 0.2, 0.2)
 	pulse_tween.tween_property(status_label, "modulate:a", 1.0, 0.2)
 
 
-# Caught functions
 func _on_caught_time_timeout() -> void:
 	has_spotted_player = true
 	if pulse_tween:
@@ -174,9 +188,11 @@ func _on_caught_time_timeout() -> void:
 	Engine.time_scale = 0.15
 	slowmo_timer.start()
 
+
 func _on_slowmo_time_timeout() -> void:
 	Engine.time_scale = 1.0
 	get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
+
 
 func set_facing(facing: float) -> void:
 	if facing > 0:
