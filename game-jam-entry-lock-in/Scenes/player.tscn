@@ -1,43 +1,30 @@
 [gd_scene format=3 uid="uid://c8nno8k74iwsu"]
 
 [ext_resource type="Script" uid="uid://bhig7el1b7exv" path="res://Scenes/playerMovement.gd" id="1_6t5aa"]
-[ext_resource type="Texture2D" uid="uid://bcuhts2cqbx0c" path="res://assets/player/spritePlayerSheet.png" id="2_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://cde2kwrdu1vbw" path="res://assets/player/runSheet.png" id="3_fkybt"]
+[ext_resource type="Texture2D" uid="uid://cy6ruuw46ouvw" path="res://assets/player/spritePlayerSheet.png" id="2_cvnsp"]
 [ext_resource type="Script" uid="uid://ytynqewpv8c7" path="res://Scenes/playerControl.gd" id="3_vgqql"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x3wgy"]
 radius = 13.0
 height = 34.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3smsa"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
 atlas = ExtResource("2_cvnsp")
-region = Rect2(33, 14, 29, 21)
+region = Rect2(96, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8erm5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
 atlas = ExtResource("2_cvnsp")
-region = Rect2(67, 2, 25, 33)
+region = Rect2(96, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_f1ek2"]
-atlas = ExtResource("3_fkybt")
-region = Rect2(0, 9, 32, 23)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tx1dd"]
-atlas = ExtResource("3_fkybt")
-region = Rect2(32, 9, 32, 23)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
-atlas = ExtResource("3_fkybt")
-region = Rect2(64, 9, 32, 23)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
-atlas = ExtResource("3_fkybt")
-region = Rect2(96, 9, 32, 23)
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkybt"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6t5aa"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_3smsa")
+"texture": SubResource("AtlasTexture_6t5aa")
 }],
 "loop": true,
 "name": &"dash",
@@ -45,7 +32,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8erm5")
+"texture": SubResource("AtlasTexture_vgqql")
 }],
 "loop": true,
 "name": &"jump",
@@ -53,16 +40,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_f1ek2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tx1dd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gymyn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pu2lt")
+"texture": SubResource("AtlasTexture_fkybt")
 }],
 "loop": true,
 "name": &"move",
@@ -73,7 +51,7 @@ animations = [{
 radius = 19.0
 height = 52.0
 
-[node name="player" type="CharacterBody2D" unique_id=1722511285]
+[node name="player" type="CharacterBody2D" unique_id=1722511285 groups=["possessable"]]
 script = ExtResource("1_6t5aa")
 is_possessed = true
 
@@ -82,8 +60,7 @@ shape = SubResource("CapsuleShape2D_x3wgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=452701996]
 sprite_frames = SubResource("SpriteFrames_6t5aa")
-animation = &"dash"
-frame_progress = 0.4696136
+animation = &"move"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2058491844]
 
